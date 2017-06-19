@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Inventory X-Over</string>
+    <string name="edit_activity">Edit Inventory X-Over</string>
+    <string name="empty_view">Please add a new bag to your inventory</string>
+    <string name="sale_button">sale</string>
+    <string name="plus_button">+</string>
+    <string name="minus_button">-</string>
+    <string name="reorder_button">reorder</string>
+    <string name="safe_button">save</string>
+
+    <string name="hint_type">bag type</string>
+    <string name="hint_description">description</string>
+    <string name="hint_price">price</string>
+    <string name="hint_email">reorder email</string>
+
+    <string name="editor_insert_failed">could not save item to inventory</string>
+    <string name="editor_insert_successful">item was saved to inventory</string>
+
+
+    <string name="description_format">%1$s\n\n%2$s</string>
+
+</resources>

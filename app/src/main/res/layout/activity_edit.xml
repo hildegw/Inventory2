@@ -1,0 +1,151 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="left">
+
+            <EditText
+                android:id="@+id/type"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_gravity="left"
+                android:hint="@string/hint_type"
+                tools:text="Amsterdam"/>
+
+            <EditText
+                android:id="@+id/description"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:hint="@string/hint_description"
+                tools:text="fancy bag"/>
+
+            <EditText
+                android:id="@+id/price"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:hint="@string/hint_price"
+                tools:text="96€"/>
+
+            <!--ImageView
+                android:id="@+id/image"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/amsterdam_large"/-->
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="16dp"
+            android:layout_gravity="right">
+
+
+            <TextView
+                android:id="@+id/quantity"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:background="#dfdfdf"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:gravity="center"
+                android:layout_gravity="right"
+                android:layout_marginTop="16dp"
+                android:padding="16dp"
+                tools:text="Quantity: 26"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="right">
+
+                <Button
+                    android:id="@+id/plus_button"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+                    android:textStyle="bold"
+                    android:textSize="24sp"
+                    android:text="@string/plus_button" />
+
+                <Button
+                    android:id="@+id/minus_button"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+                    android:textStyle="bold"
+                    android:textSize="24sp"
+                    android:text="@string/minus_button" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/reorder_button"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+                android:layout_gravity="right"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:paddingRight="16dp"
+                android:paddingLeft="16dp"
+                android:text="@string/reorder_button" />
+
+            <EditText
+                android:id="@+id/email"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                android:layout_gravity="right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:hint="@string/hint_email"
+                tools:text="96€"/>
+
+
+            <Button
+                android:id="@+id/save_button"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+                android:layout_gravity="right"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:paddingRight="16dp"
+                android:paddingLeft="16dp"
+                android:text="@string/safe_button" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+</LinearLayout>

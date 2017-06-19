@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_alignParentLeft="true"
+            android:textSize="24sp"
+            android:layout_marginTop="8dp"
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp"
+            android:text="Barcelona"/>
+
+        <Button
+            android:id="@+id/sale_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:textStyle="bold"
+            android:layout_alignParentRight="true"
+            android:textSize="18sp"
+            android:layout_marginRight="16dp"
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp"
+            android:text="@string/sale_button" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp"
+            tools:text="price 48€"/>
+
+        <TextView
+            android:id="@+id/quantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textAlignment="viewEnd"
+            android:gravity="end"
+            android:layout_marginBottom="8dp"
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp"
+            tools:text="in stock: 25"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
