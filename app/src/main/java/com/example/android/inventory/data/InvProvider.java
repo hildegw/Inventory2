@@ -84,6 +84,7 @@ public class InvProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
         //fetch values to be inserted into DB from content values variable
         //check mandatory type input before inserting into DB
+        Log.i("InvProv ", "insert");
         if(contentValues.containsKey(InventoryContract.InventoryTable.COLUMN_ITEM_TYPE)) {
             String type = contentValues.getAsString(InventoryContract.InventoryTable.COLUMN_ITEM_TYPE);
         } else {
@@ -92,7 +93,7 @@ public class InvProvider extends ContentProvider {
         String description = contentValues.getAsString(InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION);
         int price = contentValues.getAsInteger(InventoryContract.InventoryTable.COLUMN_ITEM_PRICE);
         int quantity = contentValues.getAsInteger(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY);
-        int image = contentValues.getAsInteger(InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE);
+        //int image = contentValues.getAsInteger(InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE);
         String email = contentValues.getAsString(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL);
 
         //get writable DB

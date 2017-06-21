@@ -1,8 +1,10 @@
 package com.example.android.inventory;
 
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +17,7 @@ import com.example.android.inventory.data.InventoryContract;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private final static int LOADER_ID = 0;
+    public final static int LOADER_ID = 0;
     private ItemAdapter mItemAdapter;
     private View mView;
     private RecyclerView mRecyclerView;
@@ -41,13 +43,25 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         //start Recycler
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
         // use this setting to improve performance if you know that changes in content do not change the layout size of the RecyclerView
-        //mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setHasFixedSize(true);
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
+        //and prepare loading data from DB
         getLoaderManager().initLoader(LOADER_ID, null, this);
+        //insertDummyData(); //todo remove
         Log.i("ActMain on Create", "after getLoaderManager");
+    }
+
+    //todo remove
+    private void insertDummyData() {
+        ContentValues values = new ContentValues();
+        values.put(InventoryContract.InventoryTable.COLUMN_ITEM_TYPE, "Toto");
+        values.put(InventoryContract.InventoryTable.COLUMN_ITEM_PRICE, 41);
+        values.put(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY, 11);
+        values.put(InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION, "Toto");
+        values.put(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL, "Toto");
+        Uri newUri = getContentResolver().insert(InventoryContract.InventoryTable.CONTENT_URI, values);
     }
 
 
@@ -70,10 +84,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         //Then we'll swap out the curser in our recyclerview's adapter
         // and we'll create the adapter if necessary
         // Set the adapter
+        Log.i("setting ItemAdapter", "in Main Act");
         if (mItemAdapter == null) {
             mItemAdapter = new ItemAdapter(this);
             mRecyclerView.setAdapter(mItemAdapter);  // todo : was ItemAdapter(mListener)
-            Log.i("setting ItemAdapter", "");
         }
         mItemAdapter.swapCursor(cursor);
     }

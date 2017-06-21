@@ -28,7 +28,7 @@ public abstract class RVCursorAdapter<VH extends RecyclerView.ViewHolder> extend
         if (!mCursor.moveToPosition(position)) {
             throw new IllegalStateException("Could not move cursor to position " + position + " when trying to bind viewholder");
         }
-        Log.i("onBindVH", "Cursor");
+        Log.i("onBindVH", holder.toString());
         onBindViewHolder(holder, mCursor);
     }
 
