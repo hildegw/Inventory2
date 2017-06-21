@@ -61,7 +61,6 @@ public class InvProvider extends ContentProvider {
         }
         //notify Content Resolver to watch for data changes
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
-        Log.i("InvProv", "cursor.setNotificationUri");
         return cursor;
     }
 
@@ -172,7 +171,7 @@ public class InvProvider extends ContentProvider {
                 selection = InventoryContract.InventoryTable._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 //insert updated pet data, returns the number of rows that were updated
-                numberRowsUpdated = db.update(InventoryContract.InventoryTable.TABLE_NAME, contentValues, selection,selectionArgs);                //error info
+                numberRowsUpdated = db.update(InventoryContract.InventoryTable.TABLE_NAME, contentValues, selection, selectionArgs);                //error info
                 if (numberRowsUpdated == 0) {
                     Log.e(LOG_TAG, "Failed to update row for " + uri);
                     return 0;

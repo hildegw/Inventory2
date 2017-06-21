@@ -116,12 +116,9 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         //contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE, 0);   //todo
 
         //call Content Resolver with Content URI and the content values entered by user
-        Log.i("save Item", "intending to save");
         //update item
         if (mContentUri != null) {
-            String selection = null;
-            String[] selectionArgs = new String[]{"1"};
-            int numberRowsUpdated = getContentResolver().update(mContentUri, contentValues, selection, selectionArgs);
+            int numberRowsUpdated = getContentResolver().update(mContentUri, contentValues, null, null);
             if (numberRowsUpdated == 0) {
                 Toast.makeText(this, getString(R.string.editor_insert_failed), Toast.LENGTH_SHORT).show();
             } else {
@@ -282,17 +279,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE,
                 InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL
         };
-
-        String selection = null;
-        String[] selectionArgs = new String[]{"1"};
-        Uri uri = InventoryContract.InventoryTable.CONTENT_URI;
-
-    /*/todo provide data for item to be edited, if available
-    if( getIntent().getExtras() != null) {
-        long petId = getIntent().getLongExtra("Pet-Id", 0);
-        uri = ContentUris.withAppendedId(PetContract.PetEntry.CONTENT_URI, petId);
-    }*/
-        return new CursorLoader(this, uri, projection, selection, selectionArgs, null);
+        return new CursorLoader(this, mContentUri, projection, null, null, null);
     }
 
     @Override

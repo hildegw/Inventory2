@@ -137,19 +137,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public android.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        //define projection, i.e. data columns
+        //define projection, i.e. all data columns
         String[] projection = {InventoryContract.InventoryTable._ID,
                 InventoryContract.InventoryTable.COLUMN_ITEM_TYPE,
+                InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION,
                 InventoryContract.InventoryTable.COLUMN_ITEM_PRICE,
-                InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY
+                InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY,
+                InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE,
+                InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL
         };
         //and get a CursorLoader from content provider
         return new android.content.CursorLoader(this, InventoryContract.InventoryTable.CONTENT_URI, projection, null, null, null);
     }
 
+    //hide loading circle, empty view instructions and Recycler View depending on situation
     @Override
     public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor cursor) {
-        //hide loading bar
         ProgressBar pg = (ProgressBar) findViewById(R.id.loading);
         pg.setVisibility(View.GONE);
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);

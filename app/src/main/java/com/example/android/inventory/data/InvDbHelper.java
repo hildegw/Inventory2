@@ -10,7 +10,7 @@ public class InvDbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "Inventory.db";
+    public static final String DATABASE_NAME = "inventory.db";
 
     //DB commands
     private static final String SQL_CREATE_DB_TABLE =
@@ -18,10 +18,10 @@ public class InvDbHelper extends SQLiteOpenHelper {
                     InventoryContract.InventoryTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     InventoryContract.InventoryTable.COLUMN_ITEM_TYPE + " TEXT NOT NULL," +
                     InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION + " TEXT,"  +
-                    InventoryContract.InventoryTable.COLUMN_ITEM_PRICE + " INTEGER DEFAULT NULL," +
-                    InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY + " INTEGER DEFAULT NULL," +
+                    InventoryContract.InventoryTable.COLUMN_ITEM_PRICE + " INTEGER NOT NULL DEFAULT 0," +
+                    InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY + " INTEGER NOT NULL DEFAULT 0," +
                     InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE + " INTEGER," +
-                    InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL + " TEXT)";
+                    InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL + " TEXT);";
 
     private static final String SQL_UPGRADE_ENTRIES =
             "DROP TABLE IF EXISTS " + InventoryContract.InventoryTable.TABLE_NAME;
