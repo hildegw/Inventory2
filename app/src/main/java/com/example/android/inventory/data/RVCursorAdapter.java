@@ -2,7 +2,6 @@ package com.example.android.inventory.data;
 
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 //CursorAdapter based on Recycler View
 //the Adapter takes no responsibility for closing the cursor
@@ -28,7 +27,6 @@ public abstract class RVCursorAdapter<VH extends RecyclerView.ViewHolder> extend
         if (!mCursor.moveToPosition(position)) {
             throw new IllegalStateException("Could not move cursor to position " + position + " when trying to bind viewholder");
         }
-        Log.i("onBindVH", holder.toString());
         onBindViewHolder(holder, mCursor);
     }
 

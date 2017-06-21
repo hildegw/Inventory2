@@ -76,7 +76,6 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         Button plusButton = (Button) findViewById(R.id.plus_button);
         Button minusButton = (Button) findViewById(R.id.minus_button);
         Button reorderButton = (Button) findViewById(R.id.reorder_button);
-        Button saveButton = (Button) findViewById(R.id.save_button);
 
         //set touch listener method to edit fields
         typeEditText.setOnTouchListener(mTouchListener);
@@ -88,7 +87,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
 
     //add com.example.android.inventory.data entered to the DB
     private void saveItem() {
-        //get user input
+        //get user input, type is mandatory
         String type = typeEditText.getText().toString().trim();
         String description = descriptionEditText.getText().toString().trim();
         String email = emailEditText.getText().toString().trim();
@@ -121,24 +120,20 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         //update item
         if (mContentUri != null) {
             String selection = null;
-            String[] selectionArgs = new String[] {"1"};
+            String[] selectionArgs = new String[]{"1"};
             int numberRowsUpdated = getContentResolver().update(mContentUri, contentValues, selection, selectionArgs);
             if (numberRowsUpdated == 0) {
-                Toast.makeText(this, getString(R.string.editor_insert_failed),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.editor_insert_failed), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, getString(R.string.editor_insert_successful),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.editor_insert_successful), Toast.LENGTH_SHORT).show();
             }
-        //new item
+            //new item
         } else {
             Uri mNewUri = getContentResolver().insert(InventoryContract.InventoryTable.CONTENT_URI, contentValues);
             if (mNewUri == null) {
-                Toast.makeText(this, getString(R.string.editor_insert_failed),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.editor_insert_failed), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, getString(R.string.editor_insert_successful),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.editor_insert_successful), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -151,7 +146,6 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 Toast.makeText(this, getString(R.string.editor_delete_failed),
                         Toast.LENGTH_SHORT).show();
             } else {
-                // Otherwise, the delete was successful and we can display a toast.
                 Toast.makeText(this, getString(R.string.editor_delete),
                         Toast.LENGTH_SHORT).show();
             }
@@ -169,7 +163,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        // If this is a new pet, hide the "Delete" menu item.
+        // hide the "Delete" menu item.
         if (mContentUri == null) {
             MenuItem menuItem = menu.findItem(R.id.action_delete);
             menuItem.setVisible(false);
@@ -181,8 +175,13 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                saveItem();
-                finish();
+                String type = typeEditText.getText().toString().trim();
+                if (type.equals("")) {
+                    Toast.makeText(this, getString(R.string.enter_type), Toast.LENGTH_LONG).show();
+                } else {
+                    saveItem();
+                    finish();
+                }
                 return true;
             case R.id.action_delete:
                 showDeleteConfirmationDialog();
@@ -245,9 +244,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         alertDialog.show();
     }
 
-    /**
-     * Prompt the user to confirm that they want to delete this pet.
-     */
+    //confirming user's delete choice
     private void showDeleteConfirmationDialog() {
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the postivie and negative buttons on the dialog.

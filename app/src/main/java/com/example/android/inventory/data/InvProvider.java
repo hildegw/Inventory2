@@ -61,6 +61,7 @@ public class InvProvider extends ContentProvider {
         }
         //notify Content Resolver to watch for data changes
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        Log.i("InvProv", "cursor.setNotificationUri");
         return cursor;
     }
 
@@ -84,7 +85,6 @@ public class InvProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
         //fetch values to be inserted into DB from content values variable
         //check mandatory type input before inserting into DB
-        Log.i("InvProv ", "insert");
         if(contentValues.containsKey(InventoryContract.InventoryTable.COLUMN_ITEM_TYPE)) {
             String type = contentValues.getAsString(InventoryContract.InventoryTable.COLUMN_ITEM_TYPE);
         } else {
@@ -111,7 +111,7 @@ public class InvProvider extends ContentProvider {
                 }
                 //notify Content Resolver about change
                 getContext().getContentResolver().notifyChange(uri, null);
-                //then return URI based on Content URI plus new row ID, i.e. the URI to reach the new pet entry
+                //then return URI based on Content URI plus new row ID
                 return ContentUris.withAppendedId(uri, newRowId);
             default:
                 //no match found
@@ -127,6 +127,10 @@ public class InvProvider extends ContentProvider {
         int numberRowsDeleted;
         //match content URIs
         switch (sUriMatcher.match(uri)) {
+            case INV:
+                //delete complete DB
+                numberRowsDeleted = db.delete(InventoryContract.InventoryTable.TABLE_NAME, null, null);
+                break;
             case INV_ID:
                 //find data entry matching the row ID provided by URI
                 selection = InventoryContract.InventoryTable._ID + "=?";
@@ -138,12 +142,15 @@ public class InvProvider extends ContentProvider {
                     Log.e(LOG_TAG, "Failed to delete row for " + uri);
                     return 0;
                 }
-                getContext().getContentResolver().notifyChange(uri, null);
-                return numberRowsDeleted;
+                break;
             default:
                 //no match found
                 throw new IllegalArgumentException("Cannot delete with unknown URI " + uri);
         }
+        if (numberRowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return numberRowsDeleted;
     }
 
     @Override

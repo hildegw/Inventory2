@@ -1,20 +1,21 @@
 <resources>
     <string name="app_name">Inventory X-Over</string>
-    <string name="edit_activity">Edit Inventory X-Over</string>
-    <string name="edit_activity_new_item">Add item to Inventory X-Over</string>
+    <string name="edit_activity">Edit X-Over Items</string>
+    <string name="edit_activity_new_item">Add X-Over Item</string>
     <string name="empty_view">Please add a new bag to your inventory</string>
     <string name="sale_button">sale</string>
     <string name="plus_button">+</string>
     <string name="minus_button">-</string>
     <string name="reorder_button">reorder</string>
     <string name="safe_button">save item</string>
-    <string name="delete_button">delete item</string>
-    <string name="delete_all">delete all items</string>
-    <string name="delete_dialog_msg">Delete item?</string>
+    <string name="delete_button">Delete</string>
     <string name="cancel_button">Cancel</string>
+    <string name="delete_all">delete complete inventory</string>
+    <string name="delete_dialog_msg">Please confirm delete</string>
     <string name="unsaved_changes">You have unsaved changes.</string>
     <string name="discard">discard</string>
     <string name="keep_editing">keep editing</string>
+    <string name="enter_type">Please enter a type for the new item</string>
 
     <string name="hint_type">bag type</string>
     <string name="hint_description">description</string>
@@ -25,5 +26,6 @@
     <string name="editor_insert_successful">item was saved to inventory</string>
     <string name="editor_delete">item deleted</string>
     <string name="editor_delete_failed">item could not be deleted</string>
-
+    <string name="main_delete_db">inventory deleted</string>
+    <string name="main_delete_db_failed">inventory could not be deleted</string>
 </resources>

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,8 @@ public class ItemAdapter extends RVCursorAdapter<ItemAdapter.ItemHolder> {
 
     private LayoutInflater mInflator;
     private Context mContext;
+    private TextView mEmptyStateTextView;
+
 
     //Holder class
     public static class ItemHolder extends RecyclerView.ViewHolder {
@@ -66,30 +67,16 @@ public class ItemAdapter extends RVCursorAdapter<ItemAdapter.ItemHolder> {
         int quantity = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY));
         //String email = cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL));
         //int image = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE));
-        Log.i("ItemAdapt", holder.toString());
         holder.typeView.setText(type);
-        holder.priceView.setText(valueOf(price) + " €");
-        holder.quantityView.setText("Quantity: " + valueOf(quantity));
+        if (price != 0) {
+            holder.priceView.setText(valueOf(price) + " €");
+        }
     }
 
     @Override
     public void swapCursor(Cursor newCursor) {
         super.swapCursor(newCursor);
-
-        /*/I have an text view that gets displayed when there are no
-        //items in the list, and this code handles hiding/showing it.
-        //Whenever there is a new cursor.
-        if (getItemCount() > 0) {
-            mEmptyText.setVisibility(View.GONE);
-        } else {
-            mEmptyText.setVisibility(View.VISIBLE);
-        }*/
     }
 }
 
-    /*/ todo ??? Return the size of your dataset (invoked by the layout manager)
-    @Override
-    public int getItemCount() {
-        return mBooks.size();
-    }
-    */
+
