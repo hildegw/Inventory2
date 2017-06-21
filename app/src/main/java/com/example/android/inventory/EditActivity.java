@@ -27,6 +27,7 @@ import com.example.android.inventory.data.InventoryContract;
 
 import static com.example.android.inventory.MainActivity.LOADER_ID;
 import static com.example.android.inventory.R.id.price;
+import static java.lang.String.valueOf;
 
 public class EditActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -291,12 +292,12 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         if (cursor.moveToFirst()) {
             // Attach cursor information to populate the EditText fields
             typeEditText.setText(cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_TYPE)));
-            //descriptionEditText.setText(cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION)));
-            //priceEditText.setText(cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_PRICE)));
-            //quantityTextView.setText(cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY)));
-            //emailEditText.setText(cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL)));
+            descriptionEditText.setText(cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION)));
+            priceEditText.setText(Integer.toString(cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_PRICE))));
+            quantityTextView.setText(Integer.toString(cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY))));
+            emailEditText.setText(cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL)));
             //todo image
-            Log.i("onLoadFinished", cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_TYPE)));
+            Log.i("onLoadFinished", valueOf(cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_PRICE))));
             cursor.close();
         }
     }
