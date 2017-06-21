@@ -1,9 +1,13 @@
 package com.example.android.inventory;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +63,7 @@ public class ItemAdapter extends RVCursorAdapter<ItemAdapter.ItemHolder> {
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ItemHolder holder, Cursor cursor) {
+    public void onBindViewHolder( ItemHolder holder,  Cursor cursor) {
         //binding views to cursor data
         String type = cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_TYPE));
         //String description = cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION));
@@ -67,10 +71,27 @@ public class ItemAdapter extends RVCursorAdapter<ItemAdapter.ItemHolder> {
         int quantity = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY));
         //String email = cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL));
         //int image = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE));
+        final long id = cursor.getLong(cursor.getColumnIndex(InventoryContract.InventoryTable._ID));
         holder.typeView.setText(type);
+        //showing price and image only if available
         if (price != 0) {
             holder.priceView.setText(valueOf(price) + " €");
         }
+        //if (image != 0) {
+            //holder.imageView.setxxx;
+        //}
+
+        //set click listener
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                Uri contentUri = ContentUris.withAppendedId(InventoryContract.InventoryTable.CONTENT_URI, id);
+                Intent intent = new Intent(mContext, EditActivity.class);
+                intent.setData(contentUri);
+                Log.i("ItemAd", valueOf(id) + ", " + contentUri);
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
