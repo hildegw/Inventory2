@@ -25,13 +25,12 @@
         <Button
             android:id="@+id/sale_button"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:textStyle="bold"
             android:layout_alignParentRight="true"
             android:textSize="18sp"
             android:layout_marginRight="16dp"
-            android:paddingRight="16dp"
-            android:paddingLeft="16dp"
             android:text="@string/sale_button" />
 
     </RelativeLayout>
@@ -46,9 +45,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:layout_marginBottom="8dp"
             android:paddingRight="16dp"
-            android:paddingLeft="16dp"
+            android:paddingLeft="24dp"
             tools:text="price 48€"/>
 
         <TextView
@@ -58,12 +56,16 @@
             android:textSize="14sp"
             android:textAlignment="viewEnd"
             android:gravity="end"
-            android:layout_marginBottom="8dp"
-            android:paddingRight="16dp"
+            android:paddingRight="24dp"
             android:paddingLeft="16dp"
-            tools:text="in stock: 25"/>
-
+            tools:text="Quantity: 25"/>
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginTop="8dp"
+        android:background="#f1f1f1"
+        />
 
 </LinearLayout>

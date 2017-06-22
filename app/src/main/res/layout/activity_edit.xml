@@ -3,16 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
+    android:background="@color/white"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="left">
@@ -26,6 +27,9 @@
                 android:layout_marginLeft="16dp"
                 android:layout_gravity="left"
                 android:hint="@string/hint_type"
+                android:inputType="textCapWords"
+                android:maxLines="1"
+                android:minWidth="140dp"
                 tools:text="Amsterdam"/>
 
             <EditText
@@ -35,51 +39,70 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:hint="@string/hint_description"
-                tools:text="fancy bag"/>
+                android:inputType="textMultiLine"
+                android:maxLines="2"
+                android:minWidth="140dp"
+                tools:text="fancy bag for spoilt kids"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/price"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:hint="@string/hint_price"
+                    android:maxWidth="48dp"
+                    android:inputType="number"
+
+                    tools:text="96"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:text="@string/currency"
+                    tools:text="€"/>
+            </LinearLayout>
 
             <EditText
-                android:id="@+id/price"
+                android:id="@+id/email"
                 style="@style/TextAppearance.AppCompat.Subhead"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:layout_marginLeft="16dp"
-                android:hint="@string/hint_price"
-                tools:text="96€"/>
-
-            <!--ImageView
-                android:id="@+id/image"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:adjustViewBounds="true"
-                android:contentDescription="@null"
-                android:scaleType="centerCrop"
-                tools:src="@drawable/amsterdam_large"/-->
+                android:hint="@string/hint_email"
+                android:inputType="textEmailAddress"
+                android:minWidth="140dp"
+                tools:text="reorder.bag@reorder.com"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="16dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
             android:layout_gravity="right">
-
 
             <TextView
                 android:id="@+id/quantity"
+                style="@style/TextAppearance.AppCompat.Subhead"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:background="#dfdfdf"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold"
-                android:textAllCaps="true"
-                android:gravity="center"
                 android:layout_gravity="right"
-                android:layout_marginTop="16dp"
-                android:padding="16dp"
-                tools:text="Quantity: 26"/>
+                android:layout_marginTop="32dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:padding="8dp"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                tools:text="Quantity: 26" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -92,7 +115,7 @@
                     android:id="@+id/plus_button"
                     android:layout_width="48dp"
                     android:layout_height="wrap_content"
-                    style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:textStyle="bold"
                     android:textSize="24sp"
                     android:text="@string/plus_button" />
@@ -101,7 +124,7 @@
                     android:id="@+id/minus_button"
                     android:layout_width="48dp"
                     android:layout_height="wrap_content"
-                    style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:textStyle="bold"
                     android:textSize="24sp"
                     android:text="@string/minus_button" />
@@ -111,28 +134,24 @@
                 android:id="@+id/reorder_button"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                style="@style/Base.TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_gravity="right"
-                android:textSize="18sp"
                 android:layout_marginTop="16dp"
                 android:paddingRight="16dp"
                 android:paddingLeft="16dp"
                 android:text="@string/reorder_button" />
-
-            <EditText
-                android:id="@+id/email"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:layout_gravity="right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="16dp"
-                android:hint="@string/hint_email"
-                tools:text="reorder.bag@reorder.com"/>
-
         </LinearLayout>
-    </LinearLayout>
 
-
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="8dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/amsterdam_large"/>
+    </RelativeLayout>
 
 </LinearLayout>

@@ -19,7 +19,7 @@ public class InvProvider extends ContentProvider {
     private InvDbHelper mInvDbHelper;
 
     /** Tag for the log messages */
-    public static final String LOG_TAG = InvProvider.class.getSimpleName();
+    private static final String LOG_TAG = InvProvider.class.getSimpleName();
 
     //prepare URI Matcher
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);

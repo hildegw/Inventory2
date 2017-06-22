@@ -11,11 +11,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.android.inventory.data.InventoryContract;
 import com.example.android.inventory.data.RVCursorAdapter;
 
+import static com.example.android.inventory.R.id.quantity;
 import static java.lang.String.valueOf;
 
 //import com.example.android.inventory.data.InventoryItem;
@@ -27,6 +29,8 @@ public class ItemAdapter extends RVCursorAdapter<ItemAdapter.ItemHolder> {
     private LayoutInflater mInflator;
     private Context mContext;
     private TextView mEmptyStateTextView;
+    //to be able to call itemSale(contentUri) method in Main Activity from Sale Button
+    private MainActivity mMainActivity;
 
 
     //Holder class
@@ -35,6 +39,7 @@ public class ItemAdapter extends RVCursorAdapter<ItemAdapter.ItemHolder> {
         public TextView typeView;
         public TextView priceView;
         public TextView quantityView;
+        public Button saleButton;
 
         //construct item and find its views
         public ItemHolder(View view) {
@@ -57,7 +62,8 @@ public class ItemAdapter extends RVCursorAdapter<ItemAdapter.ItemHolder> {
         final ItemHolder holder = new ItemHolder(view);
         holder.typeView = (TextView) view.findViewById(R.id.type);
         holder.priceView = (TextView) view.findViewById(R.id.price);
-        holder.quantityView = (TextView) view.findViewById(R.id.quantity);
+        holder.quantityView = (TextView) view.findViewById(quantity);
+        holder.saleButton = (Button) view.findViewById(R.id.sale_button);
         return holder;
     }
 
@@ -69,26 +75,41 @@ public class ItemAdapter extends RVCursorAdapter<ItemAdapter.ItemHolder> {
         String description = cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION));
         int price = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_PRICE));
         int quantity = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY));
-        String email = cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL));
+        String reorderEmail = cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL));
         //int image = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE));
         final long id = cursor.getLong(cursor.getColumnIndex(InventoryContract.InventoryTable._ID));
         holder.typeView.setText(type);
+        holder.quantityView.setText(mContext.getApplicationContext().getResources().getString(R.string.quantity)
+                + ": " + Integer.toString(quantity));
         //showing price and image only if available
         if (price != 0) {
-            holder.priceView.setText(valueOf(price) + " €");
+            holder.priceView.setText(valueOf(price) + mContext.getApplicationContext().getString((R.string.currency)));
         }
-        //if (image != 0) {
+        //todo if (image != 0) {
             //holder.imageView.setxxx;
         //}
 
-        //set click listener
+        //set click listener for sale button todo: geht so nicht !!!!!!
+        holder.saleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                Uri contentUri = ContentUris.withAppendedId(InventoryContract.InventoryTable.CONTENT_URI, id);
+                Log.i("ItemAdapter", contentUri.toString());
+                mMainActivity.itemSale(contentUri);
+
+                //Intent intent = new Intent(mContext, MainActivity.class);
+                //intent.setData(contentUri);
+                //mContext.startActivity(intent);
+                //todo maybe callback interface to this method???? Oder itemSale() method in itemAdapter
+            }
+        });
+        //set click listener for item
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
                 Uri contentUri = ContentUris.withAppendedId(InventoryContract.InventoryTable.CONTENT_URI, id);
                 Intent intent = new Intent(mContext, EditActivity.class);
                 intent.setData(contentUri);
-                Log.i("ItemAd", valueOf(id) + ", " + contentUri);
                 mContext.startActivity(intent);
             }
         });

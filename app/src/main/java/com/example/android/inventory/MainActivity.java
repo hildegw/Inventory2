@@ -22,8 +22,6 @@ import android.widget.Toast;
 
 import com.example.android.inventory.data.InventoryContract;
 
-import static java.lang.String.valueOf;
-
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public final static int LOADER_ID = 0;
@@ -35,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private RecyclerView.LayoutManager mLayoutManager;
     private int emptyCursor = 1;
     private MenuItem menuItem;
+    private Uri mContentUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +65,33 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mRecyclerView.setLayoutManager(mLayoutManager);
         //and prepare loading data from DB
         getLoaderManager().initLoader(LOADER_ID, null, this);
+        //then setup Sale Button
+        Intent intent = getIntent();
+        mContentUri = intent.getData();
+
         //insertDummyData(); //todo remove
-        Log.i("ActMain on Create", "after getLoaderManager");
+    }
+
+    public void itemSale(Uri contentUri){
+        Log.i("itemSale in Main", "xxx");
+        //define projection to query DB for quantity
+        String[] projection = {InventoryContract.InventoryTable._ID,
+                InventoryContract.InventoryTable.COLUMN_ITEM_TYPE,
+                InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION,
+                InventoryContract.InventoryTable.COLUMN_ITEM_PRICE,
+                InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY,
+                InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE,
+                InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL
+        };
+        //Cursor cursor = getContentResolver().query(contentUri, projection, null, null, null);
+
+        // put quantity back into content values
+        ContentValues contentValues = new ContentValues();
+        //contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY, quantity);
+
+        //todo: uri, contentvalues - needs row ID
+        //int numberRowsUpdated = getContentResolver().update(mContentUri, contentValues, null, null);
+
     }
 
     //todo remove
@@ -156,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         ProgressBar pg = (ProgressBar) findViewById(R.id.loading);
         pg.setVisibility(View.GONE);
         mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
-        Log.i("onLoadFin", "getCount" + valueOf(cursor.getCount()));
         if (cursor.getCount() == 0) {
             //in case there is no data to display, set Instructions
             mEmptyStateTextView.setVisibility(View.VISIBLE);

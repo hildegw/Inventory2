@@ -17,10 +17,12 @@
     <string name="keep_editing">keep editing</string>
     <string name="enter_type">Please enter a type for the new item</string>
 
-    <string name="hint_type">bag type</string>
-    <string name="hint_description">description</string>
-    <string name="hint_price">price</string>
-    <string name="hint_email">reorder email</string>
+    <string name="hint_type">Bag Type</string>
+    <string name="hint_description">Description</string>
+    <string name="hint_price">Price</string>
+    <string name="hint_email">Reorder Email</string>
+    <string name="currency">€</string>
+    <string name="quantity">quantity</string>
 
     <string name="editor_insert_failed">could not save item to inventory</string>
     <string name="editor_insert_successful">item was saved to inventory</string>
@@ -28,4 +30,6 @@
     <string name="editor_delete_failed">item could not be deleted</string>
     <string name="main_delete_db">inventory deleted</string>
     <string name="main_delete_db_failed">inventory could not be deleted</string>
+    <string name="no_email">email could not be sent</string>
+
 </resources>
