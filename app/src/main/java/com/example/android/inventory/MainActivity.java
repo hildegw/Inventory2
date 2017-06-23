@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import com.example.android.inventory.data.InventoryContract;
 
+import static java.lang.String.valueOf;
+
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public final static int LOADER_ID = 0;
@@ -33,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private RecyclerView.LayoutManager mLayoutManager;
     private int emptyCursor = 1;
     private MenuItem menuItem;
-    private Uri mContentUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +69,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     public void itemSale(Uri contentUri){
-        Log.i("itemSale in Main", "xxx");
         //define projection to query DB for quantity
-        String[] projection = {InventoryContract.InventoryTable._ID,
+        String[] projection = {//InventoryContract.InventoryTable._ID,
                 //InventoryContract.InventoryTable.COLUMN_ITEM_TYPE,
                 //InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION,
                 //InventoryContract.InventoryTable.COLUMN_ITEM_PRICE,
@@ -86,13 +86,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
         if (cursor.moveToFirst()) {
             quantity = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY));
+            Log.i("itemSale in Main", valueOf(quantity));
         }
         // If quantity before sale is 1 or more, reduce by 1 and save back to DB
         if (quantity > 0) {
             quantity -= 1;
             ContentValues contentValues = new ContentValues();
             contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY, quantity);
-            int numberRowsUpdated = getContentResolver().update(mContentUri, contentValues, null, null);
+            int numberRowsUpdated = getContentResolver().update(contentUri, contentValues, null, null);
         }
     }
 

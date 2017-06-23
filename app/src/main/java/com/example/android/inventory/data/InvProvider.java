@@ -83,18 +83,10 @@ public class InvProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
         //fetch values to be inserted into DB from content values variable
-        //check mandatory type input before inserting into DB
-        if(contentValues.containsKey(InventoryContract.InventoryTable.COLUMN_ITEM_TYPE)) {
-            String type = contentValues.getAsString(InventoryContract.InventoryTable.COLUMN_ITEM_TYPE);
-        } else {
+        //check for mandatory type before inserting into DB
+        if(!contentValues.containsKey(InventoryContract.InventoryTable.COLUMN_ITEM_TYPE)) {
             throw new IllegalArgumentException("Item requires a name");
         }
-        String description = contentValues.getAsString(InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION);
-        int price = contentValues.getAsInteger(InventoryContract.InventoryTable.COLUMN_ITEM_PRICE);
-        int quantity = contentValues.getAsInteger(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY);
-        //int image = contentValues.getAsInteger(InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE);
-        String email = contentValues.getAsString(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL);
-
         //get writable DB
         SQLiteDatabase db = mInvDbHelper.getWritableDatabase();
 
@@ -154,12 +146,6 @@ public class InvProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] selectionArgs) {
-        String type = contentValues.getAsString(InventoryContract.InventoryTable.COLUMN_ITEM_TYPE);
-        String description = contentValues.getAsString(InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION);
-        int price = contentValues.getAsInteger(InventoryContract.InventoryTable.COLUMN_ITEM_PRICE);
-        int quantity = contentValues.getAsInteger(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY);
-        //int image = contentValues.getAsInteger(InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE);
-        String email = contentValues.getAsString(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL);
         //get writable DB
         SQLiteDatabase db = mInvDbHelper.getWritableDatabase();
         //initiate return value for update method
@@ -170,7 +156,7 @@ public class InvProvider extends ContentProvider {
                 // select just one row with _ID
                 selection = InventoryContract.InventoryTable._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                //insert updated pet data, returns the number of rows that were updated
+                Log.i("InvProv", selection + ", " + selectionArgs[0]);
                 numberRowsUpdated = db.update(InventoryContract.InventoryTable.TABLE_NAME, contentValues, selection, selectionArgs);                //error info
                 if (numberRowsUpdated == 0) {
                     Log.e(LOG_TAG, "Failed to update row for " + uri);
