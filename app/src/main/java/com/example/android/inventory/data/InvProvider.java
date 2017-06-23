@@ -156,7 +156,6 @@ public class InvProvider extends ContentProvider {
                 // select just one row with _ID
                 selection = InventoryContract.InventoryTable._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                Log.i("InvProv", selection + ", " + selectionArgs[0]);
                 numberRowsUpdated = db.update(InventoryContract.InventoryTable.TABLE_NAME, contentValues, selection, selectionArgs);                //error info
                 if (numberRowsUpdated == 0) {
                     Log.e(LOG_TAG, "Failed to update row for " + uri);

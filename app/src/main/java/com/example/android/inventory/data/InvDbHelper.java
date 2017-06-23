@@ -20,7 +20,6 @@ public class InvDbHelper extends SQLiteOpenHelper {
                     InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION + " TEXT,"  +
                     InventoryContract.InventoryTable.COLUMN_ITEM_PRICE + " INTEGER NOT NULL DEFAULT 0," +
                     InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY + " INTEGER NOT NULL DEFAULT 0," +
-                    InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE + " INTEGER," +
                     InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL + " TEXT);";
 
     private static final String SQL_UPGRADE_ENTRIES =

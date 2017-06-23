@@ -12,7 +12,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,18 +21,13 @@ import android.widget.Toast;
 
 import com.example.android.inventory.data.InventoryContract;
 
-import static java.lang.String.valueOf;
-
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public final static int LOADER_ID = 0;
     private TextView mEmptyStateTextView;
     private ItemAdapter mItemAdapter;
-    private View mView;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;  //comes as part of recycler view
     private RecyclerView.LayoutManager mLayoutManager;
-    private int emptyCursor = 1;
     private MenuItem menuItem;
 
     @Override
@@ -70,13 +64,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public void itemSale(Uri contentUri){
         //define projection to query DB for quantity
-        String[] projection = {//InventoryContract.InventoryTable._ID,
-                //InventoryContract.InventoryTable.COLUMN_ITEM_TYPE,
-                //InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION,
-                //InventoryContract.InventoryTable.COLUMN_ITEM_PRICE,
+        String[] projection = {
                 InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY
-                //InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE,
-                //InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL
         };
         //get DB cursor for selected row via contentUri and read quantity value
         int quantity = 0;
@@ -86,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
         if (cursor.moveToFirst()) {
             quantity = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY));
-            Log.i("itemSale in Main", valueOf(quantity));
         }
         // If quantity before sale is 1 or more, reduce by 1 and save back to DB
         if (quantity > 0) {
@@ -95,11 +83,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY, quantity);
             int numberRowsUpdated = getContentResolver().update(contentUri, contentValues, null, null);
         }
+        cursor.close();
     }
 
     private void deleteInventory() {
         int rowsDeleted = getContentResolver().delete(InventoryContract.InventoryTable.CONTENT_URI, null, null);
-        Log.v("CatalogActivity", rowsDeleted + " rows deleted from pet database");
         if (rowsDeleted == 0) {
             Toast.makeText(this, getString(R.string.main_delete_db_failed),
                     Toast.LENGTH_SHORT).show();
@@ -115,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         menuItem = menu.findItem(R.id.action_delete_all_entries);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -159,7 +146,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION,
                 InventoryContract.InventoryTable.COLUMN_ITEM_PRICE,
                 InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY,
-                InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE,
                 InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL
         };
         //and get a CursorLoader from content provider
@@ -184,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             // Set the adapter if cursor data exists
             if (mItemAdapter == null) {
                 mItemAdapter = new ItemAdapter(this);
-                mRecyclerView.setAdapter(mItemAdapter);  // todo : was ItemAdapter(mListener)
+                mRecyclerView.setAdapter(mItemAdapter);
             }
             mItemAdapter.swapCursor(cursor);
         }

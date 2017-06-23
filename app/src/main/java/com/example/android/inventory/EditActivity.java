@@ -20,7 +20,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +38,6 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     private EditText priceEditText;
     private EditText emailEditText;
     private TextView quantityTextView;
-    private ImageView imageView;
     private int quantity = 0;
     private String reorderEmail = "";
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
@@ -74,20 +72,21 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         descriptionEditText = (EditText) findViewById(R.id.description);
         priceEditText = (EditText) findViewById(price);
         emailEditText = (EditText) findViewById(email);
-        imageView = (ImageView) findViewById(R.id.image);
         quantityTextView = (TextView) findViewById(R.id.quantity);
+        Button plusButton = (Button) findViewById(R.id.plus_button);
+        Button minusButton = (Button) findViewById(R.id.minus_button);
+        Button reorderButton = (Button) findViewById(R.id.reorder_button);
 
         //set touch listener method to edit fields and for buttons
         typeEditText.setOnTouchListener(mTouchListener);
         descriptionEditText.setOnTouchListener(mTouchListener);
         priceEditText.setOnTouchListener(mTouchListener);
         emailEditText.setOnTouchListener(mTouchListener);
+        plusButton.setOnTouchListener(mTouchListener);
+        minusButton.setOnTouchListener(mTouchListener);
 
         //button wiring for "add new item"
         if (mContentUri == null) {
-            Button plusButton = (Button) findViewById(R.id.plus_button);
-            Button minusButton = (Button) findViewById(R.id.minus_button);
-            Button reorderButton = (Button) findViewById(R.id.reorder_button);
             quantityTextView.setText(getResources().getString(R.string.quantity) + "\n" + "0");
             plusButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -144,7 +143,6 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION, description);
         contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY, quantity);
         contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL, reorderEmail);
-        //contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE, 0);   //todo
 
         //call Content Resolver with Content URI and the content values entered by user
         //update item
@@ -243,7 +241,6 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // User clicked "Discard" button, close the current activity.
                         finish();
                     }
                 };
@@ -307,7 +304,6 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION,
                 InventoryContract.InventoryTable.COLUMN_ITEM_PRICE,
                 InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY,
-                InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE,
                 InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL
         };
         return new CursorLoader(this, mContentUri, projection, null, null, null);
@@ -326,9 +322,8 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             priceEditText.setText(Integer.toString(cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_PRICE))));
             reorderEmail = cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL));
             emailEditText.setText(cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL)));
-            //todo image, reoder
             quantity = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY));
-            quantityTextView.setText("Quantity\n" + Integer.toString(quantity));
+            quantityTextView.setText(getResources().getString(R.string.quantity) + "\n"  + Integer.toString(quantity));
 
         }
         //button wiring for edit item
@@ -339,7 +334,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View view) {
                 quantity += 1;
-                quantityTextView.setText("Quantity\n" + Integer.toString(quantity));
+                quantityTextView.setText(getResources().getString(R.string.quantity) + "\n"  + Integer.toString(quantity));
             }
         });
         minusButton.setOnClickListener(new View.OnClickListener() {
@@ -347,7 +342,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             public void onClick(View view) {
                 if (quantity > 0){
                     quantity -= 1;
-                    quantityTextView.setText("Quantity\n" + Integer.toString(quantity));
+                    quantityTextView.setText(getResources().getString(R.string.quantity) + "\n"  + Integer.toString(quantity));
                 }
             }
         });
@@ -359,7 +354,6 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 try {
                     startActivity(reorder);
                 } catch (ActivityNotFoundException e) {
-                    Log.e(LOG_TAG, "no email service available");
                     Toast.makeText(EditActivity.this, getString(R.string.no_email), Toast.LENGTH_LONG).show();
                 }
             }

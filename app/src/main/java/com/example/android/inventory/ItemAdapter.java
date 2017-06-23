@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +27,6 @@ public class ItemAdapter extends RVCursorAdapter<ItemAdapter.ItemHolder> {
 
     private LayoutInflater mInflator;
     private Context mContext;
-    private TextView mEmptyStateTextView;
-    //to be able to call itemSale(contentUri) method in Main Activity from Sale Button
-    private MainActivity mMainActivity;
-
 
     //Holder class
     public static class ItemHolder extends RecyclerView.ViewHolder {
@@ -72,40 +67,26 @@ public class ItemAdapter extends RVCursorAdapter<ItemAdapter.ItemHolder> {
     public void onBindViewHolder( ItemHolder holder,  Cursor cursor) {
         //fetching data from the current cursor
         String type = cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_TYPE));
-        String description = cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION));
         int price = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_PRICE));
         int quantity = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY));
-        String reorderEmail = cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL));
-        //int image = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE));
         final long id = cursor.getLong(cursor.getColumnIndex(InventoryContract.InventoryTable._ID));
         holder.typeView.setText(type);
         holder.quantityView.setText(mContext.getApplicationContext().getResources().getString(R.string.quantity)
                 + ": " + Integer.toString(quantity));
-        //showing price and image only if available
+        //showing price only if available
         if (price != 0) {
             holder.priceView.setText(valueOf(price) + mContext.getApplicationContext().getString((R.string.currency)));
         }
-        //todo if (image != 0) {
-            //holder.imageView.setxxx;
-        //}
 
-        //set click listener for sale button todo: geht so nicht !!!!!!
+        //set click listener for sale button
         holder.saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
                 Uri contentUri = ContentUris.withAppendedId(InventoryContract.InventoryTable.CONTENT_URI, id);
-                Log.i("ItemAdapter", contentUri.toString());
                 //calling itemSale method in MainActivity via interface
                 if(mContext instanceof MainActivity) {
                     ((MainActivity) mContext).itemSale(contentUri);
                 }
-
-                // /mMainActivity.itemSale(contentUri); // todo, not sure this kills the app????
-
-                //Intent intent = new Intent(mContext, MainActivity.class);
-                //intent.setData(contentUri);
-                //mContext.startActivity(intent);
-                //todo maybe callback interface to this method???? Oder itemSale() method in itemAdapter
             }
         });
         //set click listener for item
