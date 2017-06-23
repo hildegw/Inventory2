@@ -65,44 +65,35 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mRecyclerView.setLayoutManager(mLayoutManager);
         //and prepare loading data from DB
         getLoaderManager().initLoader(LOADER_ID, null, this);
-        //then setup Sale Button
-        Intent intent = getIntent();
-        mContentUri = intent.getData();
-
-        //insertDummyData(); //todo remove
     }
 
     public void itemSale(Uri contentUri){
         Log.i("itemSale in Main", "xxx");
         //define projection to query DB for quantity
         String[] projection = {InventoryContract.InventoryTable._ID,
-                InventoryContract.InventoryTable.COLUMN_ITEM_TYPE,
-                InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION,
-                InventoryContract.InventoryTable.COLUMN_ITEM_PRICE,
-                InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY,
-                InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE,
-                InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL
+                //InventoryContract.InventoryTable.COLUMN_ITEM_TYPE,
+                //InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION,
+                //InventoryContract.InventoryTable.COLUMN_ITEM_PRICE,
+                InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY
+                //InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE,
+                //InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL
         };
-        //Cursor cursor = getContentResolver().query(contentUri, projection, null, null, null);
-
-        // put quantity back into content values
-        ContentValues contentValues = new ContentValues();
-        //contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY, quantity);
-
-        //todo: uri, contentvalues - needs row ID
-        //int numberRowsUpdated = getContentResolver().update(mContentUri, contentValues, null, null);
-
-    }
-
-    //todo remove
-    private void insertDummyData() {
-        ContentValues values = new ContentValues();
-        values.put(InventoryContract.InventoryTable.COLUMN_ITEM_TYPE, "Toto");
-        values.put(InventoryContract.InventoryTable.COLUMN_ITEM_PRICE, 41);
-        values.put(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY, 11);
-        values.put(InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION, "Toto");
-        values.put(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL, "Toto");
-        Uri newUri = getContentResolver().insert(InventoryContract.InventoryTable.CONTENT_URI, values);
+        //get DB cursor for selected row via contentUri and read quantity value
+        int quantity = 0;
+        Cursor cursor = getContentResolver().query(contentUri, projection, null, null, null);
+        if (cursor == null || cursor.getCount() < 1) {
+            return;
+        }
+        if (cursor.moveToFirst()) {
+            quantity = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY));
+        }
+        // If quantity before sale is 1 or more, reduce by 1 and save back to DB
+        if (quantity > 0) {
+            quantity -= 1;
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY, quantity);
+            int numberRowsUpdated = getContentResolver().update(mContentUri, contentValues, null, null);
+        }
     }
 
     private void deleteInventory() {

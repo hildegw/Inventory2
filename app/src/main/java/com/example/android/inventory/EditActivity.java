@@ -88,12 +88,12 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             Button plusButton = (Button) findViewById(R.id.plus_button);
             Button minusButton = (Button) findViewById(R.id.minus_button);
             Button reorderButton = (Button) findViewById(R.id.reorder_button);
-            quantityTextView.setText("Quantity\n" + "0");
+            quantityTextView.setText(getResources().getString(R.string.quantity) + "\n" + "0");
             plusButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     quantity += 1;
-                    quantityTextView.setText("Quantity\n" + Integer.toString(quantity));
+                    quantityTextView.setText(getResources().getString(R.string.quantity) + "\n" + Integer.toString(quantity));
                 }
             });
             minusButton.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +101,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 public void onClick(View view) {
                     if (quantity > 0){
                         quantity -= 1;
-                        quantityTextView.setText("Quantity\n" + Integer.toString(quantity));
+                        quantityTextView.setText(getResources().getString(R.string.quantity) + "\n" + Integer.toString(quantity));
                     }
                 }
             });

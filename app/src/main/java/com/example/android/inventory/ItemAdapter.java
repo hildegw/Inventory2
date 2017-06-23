@@ -95,7 +95,12 @@ public class ItemAdapter extends RVCursorAdapter<ItemAdapter.ItemHolder> {
             public void onClick(View v){
                 Uri contentUri = ContentUris.withAppendedId(InventoryContract.InventoryTable.CONTENT_URI, id);
                 Log.i("ItemAdapter", contentUri.toString());
-                mMainActivity.itemSale(contentUri);
+                //calling itemSale method in MainActivity via interface
+                if(mContext instanceof MainActivity) {
+                    ((MainActivity) mContext).itemSale(contentUri);
+                }
+
+                // /mMainActivity.itemSale(contentUri); // todo, not sure this kills the app????
 
                 //Intent intent = new Intent(mContext, MainActivity.class);
                 //intent.setData(contentUri);
