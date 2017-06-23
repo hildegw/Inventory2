@@ -15,7 +15,7 @@
     <string name="unsaved_changes">You have unsaved changes.</string>
     <string name="discard">discard</string>
     <string name="keep_editing">keep editing</string>
-    <string name="enter_type">Please enter a type for the new item</string>
+    <string name="mandatory">Please enter type, price, and quantity!</string>
 
     <string name="hint_type">Bag Type</string>
     <string name="hint_description">Description</string>
