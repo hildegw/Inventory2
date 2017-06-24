@@ -33,5 +33,6 @@
     <string name="main_delete_db_failed">inventory could not be deleted</string>
     <string name="no_email">email could not be sent</string>
     <string name="no_image">please select an image</string>
+    <string name="no_gallery">gallery could not be opened</string>
 
 </resources>

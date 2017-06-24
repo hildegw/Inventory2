@@ -43,26 +43,4 @@ public class InvDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_UPGRADE_ENTRIES);
         onCreate(sqLiteDatabase);
     }
-
-
-    /*/todo method to save an image to device storage, returns the path to be stored in DB
-    public String saveImagetoStorage(long imageId, Bitmap image) {
-        // Saves the new picture to the internal storage with the unique identifier of the report as
-        // the name. That way, there will never be two report pictures with the same name.
-        String imagePath = "";
-        File internalStorage = mContext.getDir("InventoryImages", Context.MODE_PRIVATE);
-        File imagesFilePath = new File(internalStorage, imageId + ".png");
-        imagePath = imagesFilePath.toString();
-
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(imagesFilePath);
-            image.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.close();
-        } catch (Exception ex) {
-            Log.i("DATABASE", "Problem updating picture", ex);
-            imagePath = "";
-        }
-        return imagePath;
-    }*/
 }

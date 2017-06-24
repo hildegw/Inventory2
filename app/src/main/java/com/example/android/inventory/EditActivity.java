@@ -59,7 +59,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     };
     private Uri mContentUri;
-    private Uri selectedImageUri;
+    private String imagePath;
     private static final String LOG_TAG = EditActivity.class.getSimpleName();
     private static final int RESULT_LOAD_IMAGE = 100;
     private static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 101;
@@ -151,7 +151,12 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 public void onClick(View view) {
                     Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     galleryIntent.setType("image/*");
-                    startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
+                    try {
+                        startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
+                    } catch (ActivityNotFoundException e) {
+                        Log.e(LOG_TAG, "could not find gallery");
+                        Toast.makeText(EditActivity.this, getString(R.string.no_gallery), Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }
@@ -161,15 +166,14 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Uri selectedImageUri;
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             selectedImageUri = data.getData();
             String[] projection = {MediaStore.Images.Media.DATA};
-            @SuppressWarnings("deprecation")
             Cursor cursor = getContentResolver().query(selectedImageUri, projection, null, null, null);
             cursor.moveToFirst();
             int column_index = cursor.getColumnIndex(projection[0]);
-            String imagePath = cursor.getString(column_index);
-            Log.i("ImagePath", "!!! " + imagePath);
+            imagePath = cursor.getString(column_index);
             cursor.close();
             //show selected image
             File imageFile = new File(imagePath);
@@ -180,25 +184,16 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 imageView.setImageURI(Uri.fromFile(imageFile));
             }
         } else {
-            selectedImageUri = null;
             Toast.makeText(EditActivity.this, getString(R.string.no_image), Toast.LENGTH_SHORT).show();
         }
     }
-
-    /*/todo Get image from user and save locally
-    private void getImageInput(){
-        //how to get the image Input????
-        InvDbHelper dbHelper = new InvDbHelper(this);
-        String imagePath = dbHelper.saveImagetoStorage(imageId, bitmap);
-    }*/
-
 
     //show toast if type, price, quantity, and image are not entered
     private boolean checkMandatoryUserInput(){
         if (TextUtils.isEmpty(typeEditText.getText().toString().trim())
                 || quantity < 0
                 || TextUtils.isEmpty(priceEditText.getText().toString().trim())
-                || selectedImageUri == null) {
+                || imagePath == null) {
             Toast.makeText(this, getString(R.string.mandatory), Toast.LENGTH_SHORT).show();
             return false;
         } else {
@@ -212,7 +207,6 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         String description = descriptionEditText.getText().toString().trim();
         String reorderEmail = emailEditText.getText().toString().trim();
         int price = Integer.parseInt(priceEditText.getText().toString().trim());
-        String imageStringUri = selectedImageUri.toString();
 
         // Create a new map of values from user input and insert into DB
         ContentValues contentValues = new ContentValues();
@@ -220,7 +214,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_PRICE, price);
         contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION, description);
         contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY, quantity);
-        contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE, imageStringUri);
+        contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE, imagePath);
         contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL, reorderEmail);
 
         //call Content Resolver with Content URI and the content values entered by user
@@ -402,8 +396,18 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             reorderEmail = cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL));
             emailEditText.setText(cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL)));
             quantity = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY));
-            quantityTextView.setText(getResources().getString(R.string.quantity) + "\n"  + Integer.toString(quantity));
-            //todo: imagePath = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE));
+            quantityTextView.setText(getResources().getString(R.string.quantity) + "\n" + Integer.toString(quantity));
+            imagePath = cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE));
+            //show selected image
+            File imageFile = new File(imagePath);
+            if (imageFile.exists()) {
+                //Bitmap imageBitmap = BitmapFactory.decodeFile(imagePath);
+                //imageView.setImageBitmap(imageBitmap);
+                imageView = (ImageView) findViewById(R.id.image_view);
+                imageView.setImageURI(Uri.fromFile(imageFile));
+            } else {
+                Toast.makeText(EditActivity.this, getString(R.string.no_image), Toast.LENGTH_SHORT).show();
+            }
         }
 
         //button wiring for edit item
