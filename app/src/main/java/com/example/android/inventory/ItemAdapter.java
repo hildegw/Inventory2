@@ -73,10 +73,8 @@ public class ItemAdapter extends RVCursorAdapter<ItemAdapter.ItemHolder> {
         holder.typeView.setText(type);
         holder.quantityView.setText(mContext.getApplicationContext().getResources().getString(R.string.quantity)
                 + ": " + Integer.toString(quantity));
-        //showing price only if available
-        if (price != 0) {
-            holder.priceView.setText(valueOf(price) + mContext.getApplicationContext().getString((R.string.currency)));
-        }
+        holder.priceView.setText(valueOf(price) + mContext.getApplicationContext().getString((R.string.currency)));
+
 
         //set click listener for sale button
         holder.saleButton.setOnClickListener(new View.OnClickListener() {

@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <EditText
-                    android:id="@+id/price"
+                    android:id="@+id/price_text"
                     style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
             </LinearLayout>
 
             <EditText
-                android:id="@+id/email"
+                android:id="@+id/email_text"
                 style="@style/TextAppearance.AppCompat.Subhead"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -140,12 +140,23 @@
                 android:paddingRight="16dp"
                 android:paddingLeft="16dp"
                 android:text="@string/reorder_button" />
+
+            <Button
+                android:id="@+id/image_button"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_gravity="right"
+                android:layout_marginTop="16dp"
+                android:paddingRight="16dp"
+                android:paddingLeft="16dp"
+                android:text="@string/image_button" />
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/image_view"
             android:layout_width="200dp"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="8dp"
             android:adjustViewBounds="true"

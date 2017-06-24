@@ -7,6 +7,7 @@
     <string name="plus_button">+</string>
     <string name="minus_button">-</string>
     <string name="reorder_button">reorder</string>
+    <string name="image_button">pick Image</string>
     <string name="safe_button">save item</string>
     <string name="delete_button">Delete</string>
     <string name="cancel_button">Cancel</string>
@@ -15,7 +16,7 @@
     <string name="unsaved_changes">You have unsaved changes.</string>
     <string name="discard">discard</string>
     <string name="keep_editing">keep editing</string>
-    <string name="mandatory">Please enter type, price, and quantity!</string>
+    <string name="mandatory">Please enter type, price, quantity, and image!</string>
 
     <string name="hint_type">Bag Type</string>
     <string name="hint_description">Description</string>
@@ -31,5 +32,6 @@
     <string name="main_delete_db">inventory deleted</string>
     <string name="main_delete_db_failed">inventory could not be deleted</string>
     <string name="no_email">email could not be sent</string>
+    <string name="no_image">please select an image</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.example.android.inventory;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ActivityNotFoundException;
@@ -8,11 +9,16 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,14 +26,18 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.inventory.data.InventoryContract;
 
+import java.io.File;
+
 import static com.example.android.inventory.MainActivity.LOADER_ID;
-import static com.example.android.inventory.R.id.email;
-import static com.example.android.inventory.R.id.price;
+import static com.example.android.inventory.R.id.email_text;
+import static com.example.android.inventory.R.id.price_text;
+
 
 public class EditActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -38,7 +48,8 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     private EditText priceEditText;
     private EditText emailEditText;
     private TextView quantityTextView;
-    private int quantity = 0;
+    private ImageView imageView;
+    private int quantity = -1;
     private String reorderEmail = "";
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
@@ -48,8 +59,10 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     };
     private Uri mContentUri;
+    private Uri selectedImageUri;
     private static final String LOG_TAG = EditActivity.class.getSimpleName();
-
+    private static final int RESULT_LOAD_IMAGE = 100;
+    private static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,12 +83,13 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         //find all views
         typeEditText = (EditText) findViewById(R.id.type);
         descriptionEditText = (EditText) findViewById(R.id.description);
-        priceEditText = (EditText) findViewById(price);
-        emailEditText = (EditText) findViewById(email);
+        priceEditText = (EditText) findViewById(price_text);
+        emailEditText = (EditText) findViewById(email_text);
         quantityTextView = (TextView) findViewById(R.id.quantity);
         Button plusButton = (Button) findViewById(R.id.plus_button);
         Button minusButton = (Button) findViewById(R.id.minus_button);
         Button reorderButton = (Button) findViewById(R.id.reorder_button);
+        Button imageButton = (Button) findViewById(R.id.image_button);
 
         //set touch listener method to edit fields and for buttons
         typeEditText.setOnTouchListener(mTouchListener);
@@ -84,10 +98,24 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         emailEditText.setOnTouchListener(mTouchListener);
         plusButton.setOnTouchListener(mTouchListener);
         minusButton.setOnTouchListener(mTouchListener);
+        imageButton.setOnTouchListener(mTouchListener);
+
+        //ask for permission to read from Gallery
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+            }
+        }
 
         //button wiring for "add new item"
         if (mContentUri == null) {
-            quantityTextView.setText(getResources().getString(R.string.quantity) + "\n" + "0");
+            quantityTextView.setText(getResources().getString(R.string.quantity) + "\n" + "");
             plusButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -118,23 +146,73 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                     }
                 }
             });
+            imageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    galleryIntent.setType("image/*");
+                    startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
+                }
+            });
         }
     }
 
-    //add com.example.android.inventory.data entered to the DB
+    //receiving Uri for image from Gallery Intent on Image Button Click
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            selectedImageUri = data.getData();
+            String[] projection = {MediaStore.Images.Media.DATA};
+            @SuppressWarnings("deprecation")
+            Cursor cursor = getContentResolver().query(selectedImageUri, projection, null, null, null);
+            cursor.moveToFirst();
+            int column_index = cursor.getColumnIndex(projection[0]);
+            String imagePath = cursor.getString(column_index);
+            Log.i("ImagePath", "!!! " + imagePath);
+            cursor.close();
+            //show selected image
+            File imageFile = new File(imagePath);
+            if (imageFile.exists()){
+                //Bitmap imageBitmap = BitmapFactory.decodeFile(imagePath);
+                //imageView.setImageBitmap(imageBitmap);
+                imageView = (ImageView) findViewById(R.id.image_view);
+                imageView.setImageURI(Uri.fromFile(imageFile));
+            }
+        } else {
+            selectedImageUri = null;
+            Toast.makeText(EditActivity.this, getString(R.string.no_image), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /*/todo Get image from user and save locally
+    private void getImageInput(){
+        //how to get the image Input????
+        InvDbHelper dbHelper = new InvDbHelper(this);
+        String imagePath = dbHelper.saveImagetoStorage(imageId, bitmap);
+    }*/
+
+
+    //show toast if type, price, quantity, and image are not entered
+    private boolean checkMandatoryUserInput(){
+        if (TextUtils.isEmpty(typeEditText.getText().toString().trim())
+                || quantity < 0
+                || TextUtils.isEmpty(priceEditText.getText().toString().trim())
+                || selectedImageUri == null) {
+            Toast.makeText(this, getString(R.string.mandatory), Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    //save edit text input to DB
     private void saveItem() {
-        //get user input, type is mandatory
         String type = typeEditText.getText().toString().trim();
         String description = descriptionEditText.getText().toString().trim();
         String reorderEmail = emailEditText.getText().toString().trim();
-
-        //set price and quantity to 0, if not entered
-        int price;
-        if (priceEditText.length() > 0) {
-            price = Integer.parseInt(priceEditText.getText().toString().trim());
-        } else {
-            price = 0;
-        }
+        int price = Integer.parseInt(priceEditText.getText().toString().trim());
+        String imageStringUri = selectedImageUri.toString();
 
         // Create a new map of values from user input and insert into DB
         ContentValues contentValues = new ContentValues();
@@ -142,6 +220,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_PRICE, price);
         contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION, description);
         contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY, quantity);
+        contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE, imageStringUri);
         contentValues.put(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL, reorderEmail);
 
         //call Content Resolver with Content URI and the content values entered by user
@@ -201,9 +280,8 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                String type = typeEditText.getText().toString().trim();
-                if (type.equals("")) {
-                    Toast.makeText(this, getString(R.string.enter_type), Toast.LENGTH_LONG).show();
+                if (!checkMandatoryUserInput()) {
+                    checkMandatoryUserInput();
                 } else {
                     saveItem();
                     finish();
@@ -304,6 +382,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION,
                 InventoryContract.InventoryTable.COLUMN_ITEM_PRICE,
                 InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY,
+                InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE,
                 InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL
         };
         return new CursorLoader(this, mContentUri, projection, null, null, null);
@@ -324,12 +403,15 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             emailEditText.setText(cursor.getString(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL)));
             quantity = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY));
             quantityTextView.setText(getResources().getString(R.string.quantity) + "\n"  + Integer.toString(quantity));
-
+            //todo: imagePath = cursor.getInt(cursor.getColumnIndex(InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE));
         }
+
         //button wiring for edit item
         Button plusButton = (Button) findViewById(R.id.plus_button);
         Button minusButton = (Button) findViewById(R.id.minus_button);
         Button reorderButton = (Button) findViewById(R.id.reorder_button);
+        Button imageButton = (Button) findViewById(R.id.image_button);
+
         plusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -356,6 +438,14 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(EditActivity.this, getString(R.string.no_email), Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
             }
         });
     }

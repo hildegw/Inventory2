@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 InventoryContract.InventoryTable.COLUMN_ITEM_DESCRIPTION,
                 InventoryContract.InventoryTable.COLUMN_ITEM_PRICE,
                 InventoryContract.InventoryTable.COLUMN_ITEM_QUANTITY,
+                InventoryContract.InventoryTable.COLUMN_ITEM_IMAGE,
                 InventoryContract.InventoryTable.COLUMN_ITEM_EMAIL
         };
         //and get a CursorLoader from content provider
